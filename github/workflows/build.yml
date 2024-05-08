@@ -31,7 +31,8 @@ jobs:
          
           if [[ $(echo "${{ steps.vulnerabilities.outputs.vulnerabilities }}" | grep "HIGH") ]]; then
           echo "Vulnerabilities found, exit"
-            exit 1
+          exit 1
+          fi
           
 
       - name: Build and push Docker image
