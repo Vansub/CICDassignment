@@ -37,7 +37,7 @@ jobs:
       - name: Check vulnerabilities
         run: |
           if [[ $(echo "${{ steps.vulnerabilities.outputs.vulnerabilities }}" | wc -l) -gt 1 ]]; then
-            echo "Vulnerabilities found, exiting..."
+            echo "Vulnerabilities found, exit"
             exit 1
           fi
 
@@ -60,6 +60,6 @@ jobs:
           done
           cosign sign --key env://COSIGN_PRIVATE_KEY myapp
         env:
-          DOCKER_USERNAME: ${{ secrets.vs1972}}
-          COSIGN_PASSWORD: ${{ secrets. dhushdiya}}
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME}}
+          COSIGN_PASSWORD: ${{ secrets. COSIGN_PASSWORD}}
           COSIGN_REPOSITORY: ${{ secrets.COSIGN_REPOSITORY }
