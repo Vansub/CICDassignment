@@ -8,24 +8,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     jobs:
-  example:
-    runs-on: ubuntu-latest
+  
 
-    permissions: {}
-
-    name: Install Cosign via go install
-    steps:
-      - name: Install go
-        uses: actions/setup-go@v4
-        with:
-          go-version: '1.21'
-          check-latest: true
-      - name: Install Cosign
-        uses: sigstore/cosign-installer@v3.5.0
-        with:
-          cosign-release: main
-     - name: Check install!
-        run: cosign version
+    
+      
 
     steps:
       - name: Checkout code
@@ -41,7 +27,7 @@ jobs:
           image-ref: myapp:tag
           format: table
 
-     - name: Setup Trivy
+      - name: Setup Trivy
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: "myapp"
@@ -72,8 +58,8 @@ jobs:
           for tag in ${TAGS}; do
             images+="${tag}@${DIGEST} "
           done
-          cosign sign --yes --key env://COSIGN_PRIVATE_KEY ${images}
+          cosign sign --key env://COSIGN_PRIVATE_KEY myapp
         env:
           DOCKER_USERNAME: ${{ secrets.vs1972}}
-          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
+          COSIGN_PASSWORD: ${{ secrets. dhushdiya}}
           COSIGN_REPOSITORY: ${{ secrets.COSIGN_REPOSITORY }
