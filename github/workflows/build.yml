@@ -54,3 +54,26 @@ jobs:
             echo "Vulnerabilities found, exiting..."
             exit 1
           fi
+
+      - name: Build and push Docker image
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:latest
+
+      - name: Get image digest
+        id: get_digest
+        run: echo "::set-output name=digest::$(docker inspect --format='{{index .RepoDigests 0}}' ${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:latest)"
+
+      - name: Sign image with a key
+        run: |
+          images=""
+          for tag in ${TAGS}; do
+            images+="${tag}@${DIGEST} "
+          done
+          cosign sign --yes --key env://COSIGN_PRIVATE_KEY ${images}
+        env:
+          DOCKER_USERNAME: ${{ secrets.vs1972}}
+          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
+          COSIGN_REPOSITORY: ${{ secrets.COSIGN_REPOSITORY }
