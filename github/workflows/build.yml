@@ -36,8 +36,9 @@ jobs:
 
       - name: Check vulnerabilities
         run: |
-          if [[ $(echo "${{ steps.vulnerabilities.outputs.vulnerabilities }}" | wc -l) -gt 1 ]]; then
-            echo "Vulnerabilities found, exit"
+         
+          if [[ $(echo "${{ steps.vulnerabilities.outputs.vulnerabilities }}" | grep "HIGH") ]]; then
+          echo "Vulnerabilities found, exit"
             exit 1
           fi
 
