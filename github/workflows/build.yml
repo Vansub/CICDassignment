@@ -9,10 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     jobs:
   
-
-    
-      
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -28,6 +24,7 @@ jobs:
         with:
           image-ref: myapp:tag
           format: table
+          args: "--severity HIGH"
 
       - name: Check vulnerabilities
         run: |
@@ -35,21 +32,21 @@ jobs:
           if [[ $(echo "${{ steps.vulnerabilities.outputs.vulnerabilities }}" | grep "HIGH") ]]; then
           echo "Vulnerabilities found, exit"
             exit 1
-          else
+          
 
-           - name: Build and push Docker image
-            id: docker_build
-            uses: docker/build-push-action@v2
-            with:
+      - name: Build and push Docker image
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
               push: true
               tags: ${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:latest
 
-           - name: Get image digest
-            id: get_digest
-            run: echo "::set-output name=digest::$(docker inspect --format='{{index .RepoDigests 0}}' ${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:latest)"
+      - name: Get image digest
+        id: get_digest
+        run: echo "::set-output name=digest::$(docker inspect --format='{{index .RepoDigests 0}}' ${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:latest)"
 
-          - name: Sign image with a key
-              run: |
+      - name: Sign image with a key
+        run: |
               images=""
               for tag in ${TAGS}; do
                 images+="${tag}@${DIGEST} "
