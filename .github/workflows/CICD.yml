@@ -10,6 +10,16 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+      - name: Install Trivy
+        run: |
+          wget -qO- https://github.com/aquasecurity/trivy/releases/download/v0.20.0/trivy_0.20.0_Linux-64bit.tar.gz | tar xvz
+          sudo mv trivy /usr/local/bin/
+
+      - name: Update Trivy DB
+        run: trivy --download-db-only
+
+      
+
       - name: Install Cosign
         run: |
             curl -sL https://github.com/sigstore/cosign/releases/latest/download/cosign-linux-amd64 --output cosign
