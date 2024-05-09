@@ -11,6 +11,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        
 
       - name: Scan for vulnerabilities with Trivy
         uses: aquasecurity/trivy-action@v2
