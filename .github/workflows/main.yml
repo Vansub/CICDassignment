@@ -25,6 +25,8 @@ jobs:
           args: "--severity HIGH"
         id: vulnerabilities
 
+        
+
       - name: Check vulnerabilities
         run: |
           if [[ $(echo "${{ steps.vulnerabilities.outputs.vulnerabilities }}" | grep "HIGH") ]]; then
