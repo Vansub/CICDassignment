@@ -15,8 +15,7 @@ jobs:
         with:
           go-version: '1.16'
       - name: Scan go.mod file for vulnerabilities with Trivy
-        run: trivy filesystem --format table --vuln-type library --severity HIGH,CRITICAL "C:\\Users\\Vani\\Desktop\\MyCICDassignment\\CICDassignment\\go.mod"
-
+        run: trivy filesystem --format table --vuln-type library --severity HIGH,CRITICAL "${{ github.workspace }}/go.mod"
       
    
 
