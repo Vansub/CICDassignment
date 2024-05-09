@@ -14,42 +14,5 @@ jobs:
         uses: actions/checkout@v2
         
 
-      - name: Scan for vulnerabilities with Trivy
-        uses: aquasecurity/trivy-action@v2
-        with:
-          image-ref: myapp:tag
-          format: table
-          args: "--severity HIGH"
-        id: vulnerabilities
-
-      - name: Build Docker image
-        run: |
-          docker build -t myapp:latest .
-        working-directory: ./path/to/your/app
-
-      - name: Push Docker image to Docker Hub
-        run: |
-          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker push myapp:latest
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Sign image with a key
-        run: |
-          images=""
-          for tag in ${TAGS}; do
-            images+="${tag}@${DIGEST} "
-          done
-          cosign sign --key ${{ secrets.COSIGN_PRIVATE_KEY }} myapp
-        env:
-          COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
-
-      - name: Notify user in Slack
-        if: steps.vulnerabilities.outcome == 'failure'
-        uses: rtCamp/action-slack-notify@v2
-        with:
-          SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
-          SLACK_MESSAGE: "Vulnerabilities found in the Golang application. Image signed and pushed to Docker Hub."
-          SLACK_USERNAME: "CI/CD Pipeline"
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+    
+      
