@@ -8,9 +8,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     
-  
-    
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -26,3 +23,27 @@ jobs:
           format: table
           args: "--severity HIGH"
         id: vulnerabilities
+      - name: Check vulnerabilities
+        run: |
+         
+          if [[ $(echo "${{ steps.vulnerabilities.outputs.vulnerabilities }}" | grep "HIGH") ]]; then
+          echo "Vulnerabilities found, exit"
+          exit 1
+          fi
+          - name: Build and push Docker image
+            id: docker_build
+            uses: docker/build-push-action@v2
+            with:
+                  push: true
+                  tags: |
+                   ${{ secrets.DOCKER_USERNAME }}/myapp:${{ github.sha }}
+                   ${{ secrets.DOCKER_USERNAME }}/myapp:v1.0.0 
+    
+    
+    
+    
+          - name: Get image digest
+            id: get_digest
+            run: echo "::set-output name=digest::$(docker inspect --format='{{index .RepoDigests 0}}' ${{ secrets.DOCKER_USERNAME }}/myapp:latest)"
+              
+          
