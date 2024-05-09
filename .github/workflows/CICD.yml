@@ -42,11 +42,11 @@ jobs:
           SLACK_USERNAME: ${{ SECRETS.SLACK_USERNAME}}
           SLACK_WEBHOOK: ${{ secrets.WEBHOOKURL }}
       - name: Slack upload scan report
-        if: failure()
+        if : failure()
         uses: MeilCli/slack-upload-file@v4
         with:
+            slack_token: ${{ secrets.SLACK_TOKEN }}  # Make sure SLACK_TOKEN is added to your GitHub repository secrets
             channel_id: ${{ secrets.SLACK_CHANNEL_ID }}
-            SLACK_TOKEN: ${{ SECRETS.SLACK_TOKEN }}
             file_path: 'trivy_scan_results.txt'
             initial_comment: 'Vulnerabilities found in Trivy scan'
 
