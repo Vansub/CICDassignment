@@ -83,12 +83,12 @@ jobs:
                ${{ secrets.DOCKER_USERNAME }}/myapp:v1.0.0 
       -  name: Set up private key
          run: echo "${{ secrets.COSIGN_PRIVATE_KEY }}" > cosign.key
-      - name: Sign image with a key
-        run: |
-          cosign sign --key "${{ secrets.COSIGN_PRIVATE_KEY }}" "${{ secrets.DOCKER_USERNAME }}/vs72/cicd-assignment:${{ github.sha }}"
-        env:
+      -  name: Sign Docker image with cosign
+         env:
           COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
-
+         run: |
+          echo "$COSIGN_PRIVATE_KEY" > cosign.key
+          cosign sign --key cosign.key CICD-assignment:tag
 
 
       - name: Get image digest
