@@ -84,12 +84,11 @@ jobs:
       - name: Get image digest
         id: get_digest
         run: echo "::set-output name=digest::$(docker inspect --format='{{index .RepoDigests 0}}' ${{ secrets.DOCKER_USERNAME }}/myapp:latest)"
-          
-      
-
+         
       - name: Sign image with a key
         run: |
-          cosign sign --key "${{ secrets.COSIGN_PRIVATE_KEY }}" "${{ secrets.DOCKER_USERNAME }}/myapp:${{ github.sha }}"
+         cosign sign --key "${{ secrets.COSIGN_PRIVATE_KEY }}" "${{ secrets.DOCKER_USERNAME }}/CICD-assignment:${{ github.sha }}"
+
 
 
           
