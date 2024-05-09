@@ -10,6 +10,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+      - name: Install Cosign
+        run: |
+            curl -sL https://github.com/sigstore/cosign/releases/latest/download/cosign-linux-amd64 --output cosign
+            chmod +x cosign
+            sudo mv cosign /usr/local/bin/
+
       - name: Setup Go
         uses: actions/setup-go@v2
         with:
