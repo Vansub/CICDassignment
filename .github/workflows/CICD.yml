@@ -8,82 +8,85 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-          - uses: actions/checkout@v2
-          - name: slack notification
-            uses : rtCamp/action-slack-notify@v2
-            env:
-              SLACK_WEBHOOK: ${{ secrets.WEBHOOKURL }}
+    - uses: actions/checkout@v2
+    - name: slack notification
+      uses : rtCamp/action-slack-notify@v2
+      env:
+        SLACK_WEBHOOK: ${{ secrets.WEBHOOKURL }}
        
-          - name: Install Trivy
-            run: |
-              wget -qO- https://github.com/aquasecurity/trivy/releases/download/v0.20.0/trivy_0.20.0_Linux-64bit.tar.gz | tar xvz
-              sudo mv trivy /usr/local/bin/
+    - name: Install Trivy
+      run: |
+           wget -qO- https://github.com/aquasecurity/trivy/releases/download/v0.20.0/trivy_0.20.0_Linux-64bit.tar.gz | tar xvz
+           sudo mv trivy /usr/local/bin/
 
-          - name: Update Trivy DB
-            run: trivy --download-db-only
+    - name: Update Trivy DB
+      run: trivy --download-db-only
     
           
     
-          - name: Install Cosign
-            run: |
-                curl -sL https://github.com/sigstore/cosign/releases/latest/download/cosign-linux-amd64 --output cosign
-                chmod +x cosign
-                sudo mv cosign /usr/local/bin/
+    - name: Install Cosign
+      run: |
+        curl -sL https://github.com/sigstore/cosign/releases/latest/download/cosign-linux-amd64 --output cosign
+         chmod +x cosign
+         sudo mv cosign /usr/local/bin/
     
-          - name: Setup Go
-            uses: actions/setup-go@v2
-            with:
-              go-version: '1.16'
-          - name: Scan go.mod file for vulnerabilities with Trivy
-            run: trivy filesystem --format table --vuln-type library --severity HIGH,CRITICAL "${{ github.workspace }}/go.mod"
+    - name: Setup Go
+      uses: actions/setup-go@v2
+      with:
+          go-version: '1.16'
+          
+          
+          
+    - name: Scan go.mod file for vulnerabilities with Trivy
+      run: trivy filesystem --format table --vuln-type library --severity HIGH,CRITICAL "${{ github.workspace }}/go.mod"
           
        
-          - name: Check vulnerabilities
-            run: |
-              if [[ $(echo "${{ steps.vulnerabilities.outputs.vulnerabilities }}" | grep "HIGH") ]]; then
-              echo "Vulnerabilities found, exit"
-              exit 1
-              fi
-          - name: SLACK_MESSAGE_ON_FAILURE
-            if: steps.trivy.outcome == 'failure'
-            uses : rtCamp/action-slack-notify@v2
+    - name: Check vulnerabilities
+      run: |
+       if [[ $(echo "${{ steps.vulnerabilities.outputs.vulnerabilities }}" | grep "HIGH") ]]; then
+       echo "Vulnerabilities found, exit"
+       exit 1
+       fi
+    - name: SLACK_MESSAGE_ON_FAILURE
+      if: steps.trivy.outcome == 'failure'
+      uses : rtCamp/action-slack-notify@v2
     
-            env:
-              SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL_NAME}}
-              SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
-              SLACK_TITLE: "* SCAN STATUS-FAILED-${{ secrets.SLACK_USERNAME}}*"
-              SLACK_MESSAGE: 'TRIVY SCAN - VULNERABILITIES , REPORT UPLOADED'
-              SLACK_USERNAME: ${{ secrets.SLACK_USERNAME}}
-              SLACK_WEBHOOK: ${{ secrets.WEBHOOKURL }}
+      env:
+       SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL_NAME}}
+       SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
+       SLACK_TITLE: "* SCAN STATUS-FAILED-${{ secrets.SLACK_USERNAME}}*"
+       SLACK_MESSAGE: 'TRIVY SCAN - VULNERABILITIES , REPORT UPLOADED'
+       SLACK_USERNAME: ${{ secrets.SLACK_USERNAME}}
+       SLACK_WEBHOOK: ${{ secrets.WEBHOOKURL }}
               
-          - name: Slack upload scan report
-            if: steps.trivy.outcome == 'failure'
-            uses: MeilCli/slack-upload-file@v4
-            with:
-              slack_token: ${{ secrets.SLACK_TOKEN }}  
-              file_path: 'trivy_scan_results.exe'
-              initial_comment: 'Vulnerabilities found in Trivy scan'
+    - name: Slack upload scan report
+      if: steps.trivy.outcome == 'failure'
+      uses: MeilCli/slack-upload-file@v4
+      with:
+         slack_token: ${{ secrets.SLACK_TOKEN }}  
+         file_path: 'trivy_scan_results.exe'
+         initial_comment: 'Vulnerabilities found in Trivy scan'
           
-          - name: vulnerabilities found- Exit workflow
-            if: steps.trivy.outcome == 'failure'
-            run: 
-               exit 1
+    - name: vulnerabilities found- Exit workflow
+      if: steps.trivy.outcome == 'failure'
+      run: 
+       exit 1
             
-          - name: Login to Docker Hub
-            uses: docker/login-action@v2
-            with:
-              username: ${{ secrets.DOCKER_USERNAME }}
-              password: ${{ secrets.DOCKER_PASSWORD}}
+    - name: Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+         username: ${{ secrets.DOCKER_USERNAME }}
+         password: ${{ secrets.DOCKER_PASSWORD}}
         
      
-          - name: Build and push Docker image
-            id: docker_build
-            uses: docker/build-push-action@v2
-            with:
-                  push: true
-                  tags: |
-                   ${{ secrets.DOCKER_USERNAME }}/myapp:${{ github.sha }}
-                   ${{ secrets.DOCKER_USERNAME }}/myapp:v1.0.0 
+    - name: Build and push Docker image
+      id: docker_build
+      uses: docker/build-push-action@v2
+      with:
+         push: true
+         tags: |
+          ${{ secrets.DOCKER_USERNAME }}/myapp:${{ github.sha }}
+          ${{ secrets.DOCKER_USERNAME }}/myapp:v1.0.0 
           
           -  name: Sign Docker image with cosign
              env:
