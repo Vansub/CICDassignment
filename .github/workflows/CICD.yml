@@ -46,6 +46,7 @@ jobs:
         uses: MeilCli/slack-upload-file@v4
         with:
             channel_id: ${{ secrets.SLACK_CHANNEL_ID }}
+            SLACK_TOKEN: ${{ SECRETS.SLACK_TOKEN }}
             file_path: 'trivy_scan_results.txt'
             initial_comment: 'Vulnerabilities found in Trivy scan'
 
