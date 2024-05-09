@@ -17,6 +17,6 @@ jobs:
      
       - name: Scan go.mod file for vulnerabilities with Trivy
         run: |
-          trivy filesystem --format table --vuln-type library --severity HIGH,CRITICAL go.mod
+          trivy filesystem --format table --vuln-type library --severity HIGH,CRITICAL CICDassignment/go.mod
 
      
