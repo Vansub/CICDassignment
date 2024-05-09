@@ -94,7 +94,7 @@ jobs:
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME}}
           COSIGN_PASSWORD: ${{ secrets. COSIGN_PASSWORD}}
-          COSIGN_REPOSITORY: ${{ secrets.COSIGN_REPOSITORY }  
+          COSIGN_REPOSITORY: ${{ secrets.COSIGN_REPOSITORY }} 
 
           
       - name: SLACK_MESSAGE_ON_SUCCESS
