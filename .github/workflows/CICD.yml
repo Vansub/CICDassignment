@@ -38,11 +38,11 @@ jobs:
         run: |
           if [[ $(echo "${{ steps.vulnerabilities.outputs.vulnerabilities }}" | grep "HIGH") ]]; then
             echo "Vulnerabilities found, sending Slack notification"
-            name: SLACK_MESSAGE_ON_FAILURE
-        if: steps.trivy.outcome == 'failure'
-        uses : rtCamp/action-slack-notify@v2
+      -  name: SLACK_MESSAGE_ON_FAILURE
+         if: steps.trivy.outcome == 'failure'
+         uses : rtCamp/action-slack-notify@v2
 
-        env:
+         env:
           SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL_NAME}}
           SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
           SLACK_TITLE: "* SCAN STATUS-FAILED-${{ secrets.SLACK_USERNAME}}*"
