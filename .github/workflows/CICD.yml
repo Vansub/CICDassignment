@@ -98,7 +98,7 @@ jobs:
         env:
           SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL_NAME }}
           SLACK_TITLE: "*SCAN STATUS-SUCCESS-${{ secrets.SLACK_USERNAME }}*"
-          SLACK_MESSAGE: 'TRIVY SCAN - NO VULNERABILITIES'
+          SLACK_MESSAGE: "*Name*:${{ SECRETS.SLACK_USERNAME}}\n*Metriculation number*:A0291822A\n*email*:e1335034@u.nus.edu\n*Git*: https://github.com/{{github.repository}}\n*image*:https://hub.docker.com/repository/docker/${{Secrets.DOCKER_USERNAME}}"
           SLACK_USERNAME: ${{ secrets.SLACK_USERNAME }}
           SLACK_WEBHOOK: ${{ secrets.WEBHOOKURL }}
                 
