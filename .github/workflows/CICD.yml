@@ -14,12 +14,7 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: '1.16'
-      - name: Install Trivy
-        run: |
-          wget https://github.com/aquasecurity/trivy/releases/download/v0.51.3/trivy_0.51.3_Linux-64bit.tar.gz
-          tar zxvf trivy_0.51.3_Linux-64bit.tar.gz
-          sudo mv trivy /usr/local/bin/
-          rm trivy_0.51.3_Linux-64bit.tar.gz
+      
      
       - name: Scan go.mod file for vulnerabilities with Trivy
         run: |
