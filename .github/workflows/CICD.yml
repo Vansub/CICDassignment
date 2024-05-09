@@ -55,7 +55,7 @@ jobs:
       - name: vulnerabilities found- Exit workflow
         if: steps.trivy.outcome == 'failure'
             run:|
-          exit 1
+            exit 1
 
    
           
