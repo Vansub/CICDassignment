@@ -22,6 +22,6 @@ jobs:
           args: "--severity HIGH"
         id: vulnerabilities
 
-
+      
     
     
