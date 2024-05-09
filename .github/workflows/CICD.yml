@@ -18,9 +18,10 @@ jobs:
      
       - name: Scan go.mod file for vulnerabilities with Trivy
         run: |
-          
-          C:\path\to\trivy.exe filesystem --format table --vuln-type library --severity HIGH,CRITICAL "C:\Users\Vani\Desktop\MyCICDassignment\CICDassignment\go.mod"
-
+          sudo apt-get install -y wget
+          wget https://github.com/aquasecurity/trivy/releases/download/v0.20.0/trivy_0.20.0_Linux-64bit.tar.gz
+          tar zxvf trivy_0.20.0_Linux-64bit.tar.gz
+          ./trivy filesystem --format table --vuln-type library --severity HIGH,CRITICAL "C:\Users\Vani\Desktop\MyCICDassignment\CICDassignment\go.mod"
 
       - name: Check vulnerabilities
         run: |
@@ -49,7 +50,7 @@ jobs:
         uses: MeilCli/slack-upload-file@v4
         with:
           slack_token: ${{ secrets.SLACK_TOKEN }}  
-          file_path: ‪C:\Users\Vani\Desktop\trivy\trivy.exe
+          file_path: ‪tricy_scan_results.txt
           initial_comment: 'Vulnerabilities found in Trivy scan'
       
       - name: vulnerabilities found- Exit workflow
