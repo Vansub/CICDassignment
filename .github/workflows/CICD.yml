@@ -17,11 +17,9 @@ jobs:
       
      
       - name: Scan go.mod file for vulnerabilities with Trivy
-        run: |
-          sudo apt-get install -y wget
-          wget https://github.com/aquasecurity/trivy/releases/download/v0.20.0/trivy_0.20.0_Linux-64bit.tar.gz
-          tar zxvf trivy_0.20.0_Linux-64bit.tar.gz
-          ./trivy filesystem --format table --vuln-type library --severity HIGH,CRITICAL "C:\Users\Vani\Desktop\MyCICDassignment\CICDassignment\go.mod"
+       
+        run: trivy filesystem --format table --vuln-type library --severity HIGH,CRITICAL "C:/Users/Vani/Desktop/MyCICDassignment/CICDassignment/go.mod"
+
 
       - name: Check vulnerabilities
         run: |
