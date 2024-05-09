@@ -40,31 +40,4 @@ jobs:
           SLACK_MESSAGE: 'TRIVY SCAN - VULNERABILITIES , REPORT UPLOADED'
           SLACK_USERNAME: ${{ SECRETS.SLACK_USERNAME}}
           SLACK_WEBHOOK: ${{ secrets.WEBHOOKURL }}
-      - name: Slack upload scan report
-        if:  steps.trivy.outcome == 'failure'
-      - uses: MeilCli/slack-upload-file@v4
-        with:
-         
-          channel_id: ${{ secrets.SLACK_CHANNEL_ID }}
-          file_path: 'trivy_scan_results.txt'
-          initial_comment: 'Report ${{ SECRETS.SLACK_USERNAME}}'
-
-      - name: vulnerabilities found- Exit workflow
-        if: steps.trivy.outcome == 'failure'
-            run:|
-          exit 1
-
-      - name: Build and push Docker image
-        id: docker_build
-        uses: docker/build-push-action@v2
-        with:
-              push: true
-              tags: |
-               ${{ secrets.DOCKER_USERNAME }}/myapp:${{ github.sha }}
-               ${{ secrets.DOCKER_USERNAME }}/myapp:v1.0.0 
-
-
-
-          
-      
-
+    
