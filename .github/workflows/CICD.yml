@@ -46,11 +46,11 @@ jobs:
         uses : rtCamp/action-slack-notify@v2
 
         env:
-          SLACK_CHANNEL: ${{ SECRETS.SLACK_CHANNEL_NAME}}
-          SLACK_TOKEN: ${{ SECRETS.SLACK_TOKEN }}
-          SLACK_TITLE: "* SCAN STATUS-FAILED-${{ SECRETS.SLACK_USERNAME}}*"
+          SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL_NAME}}
+          SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
+          SLACK_TITLE: "* SCAN STATUS-FAILED-${{ secrets.SLACK_USERNAME}}*"
           SLACK_MESSAGE: 'TRIVY SCAN - VULNERABILITIES , REPORT UPLOADED'
-          SLACK_USERNAME: ${{ SECRETS.SLACK_USERNAME}}
+          SLACK_USERNAME: ${{ secrets.SLACK_USERNAME}}
           SLACK_WEBHOOK: ${{ secrets.WEBHOOKURL }}
           
       - name: Slack upload scan report
