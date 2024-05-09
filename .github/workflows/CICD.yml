@@ -80,12 +80,12 @@ jobs:
               push: true
               tags: |
                ${{ secrets.DOCKER_USERNAME }}/myapp:${{ github.sha }}
-               ${{ secrets.DOCKER_USERNAME }}/myapp:v1.0.0 }}
+               ${{ secrets.DOCKER_USERNAME }}/myapp:v1.0.0 
       - name: Sign image with a key
         run: |
           cosign sign --key cosign.key "${{ secrets.DOCKER_USERNAME }}/myapp:${{ github.sha }}"
         env:
-          COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}ur/go.mod}}
+          COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}ur/go.mod
 
 
       - name: Get image digest
