@@ -4,7 +4,6 @@ on:
     branches:
       - 'main'
       - 'release/v[0-9]+.[0-9]+'
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -28,6 +27,7 @@ jobs:
           args: "--severity HIGH"
         id: vulnerabilities
 
+<<<<<<< HEAD
       - name: Check vulnerabilities
         run: |
          
@@ -104,3 +104,6 @@ jobs:
           SLACK_USERNAME: ${{ SECRETS.SLACK_USERNAME}}
           SLACK_WEBHOOK: ${{ secrets.WEBHOOKURL }}
           
+=======
+      
+>>>>>>> c1677d6c6d858850735613eb7f43f5dd34293fc4
