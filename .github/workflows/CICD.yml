@@ -16,3 +16,10 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: '1.16'
+      - name: Scan for vulnerabilities with Trivy
+        uses: aquasecurity/trivy-action@v2
+        with:
+          image-ref: myapp:tag
+          format: table
+          args: "--severity HIGH"
+        id: vulnerabilities
