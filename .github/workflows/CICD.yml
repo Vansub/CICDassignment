@@ -19,4 +19,24 @@ jobs:
         run: |
           trivy filesystem --format table --vuln-type library --severity HIGH,CRITICAL "C:\Users\Vani\Desktop\MyCIC
 
-     
+      - name: Check vulnerabilities
+        run: |
+         
+          if [[ $(echo "${{ steps.vulnerabilities.outputs.vulnerabilities }}" | grep "HIGH") ]]; then
+          echo "Vulnerabilities found, exit"
+          exit 1
+          fi
+          
+
+    
+
+      - name: SLACK_MESSAGE_ON_FAILURE
+        if: steps.trivy.outcome == 'failure'
+        uses : rtCamp/action-slack-notify@v2
+
+        env:
+          SLACK_CHANNEL: ${{ SECRETS.SLACK_CHANNEL_NAME}}
+          SLACK_TITLE: "* SCAN STATUS-FAILED-${{ SECRETS.SLACK_USERNAME}}*"
+          SLACK_MESSAGE: 'TRIVY SCAN - VULNERABILITIES , REPORT UPLOADED'
+          SLACK_USERNAME: ${{ SECRETS.SLACK_USERNAME}}
+          SLACK_WEBHOOK: ${{ secrets.WEBHOOKURL }}
