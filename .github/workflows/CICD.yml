@@ -17,7 +17,7 @@ jobs:
       - name: Scan for vulnerabilities with Trivy
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: myapp:latest
+          image-ref: myapp:v1.0
           format: table
           args: "--severity HIGH"
         id: vulnerabilities
