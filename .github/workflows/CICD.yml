@@ -87,7 +87,10 @@ jobs:
          
       - name: Sign image with a key
         run: |
-         cosign sign --key "${{ secrets.COSIGN_PRIVATE_KEY }}" "${{ secrets.DOCKER_USERNAME }}/CICD-assignment:${{ github.sha }}"
+          cosign sign --key cosign.key "${{ secrets.DOCKER_USERNAME }}/myapp:${{ github.sha }}"
+        env:
+          COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
+
 
 
 
