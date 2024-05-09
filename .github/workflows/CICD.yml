@@ -44,9 +44,6 @@ jobs:
                    ${{ secrets.DOCKER_USERNAME }}/myapp:${{ github.sha }}
                    ${{ secrets.DOCKER_USERNAME }}/myapp:v1.0.0 
     
-    
-    
-    
           - name: Get image digest
             id: get_digest
             run: echo "::set-output name=digest::$(docker inspect --format='{{index .RepoDigests 0}}' ${{ secrets.DOCKER_USERNAME }}/myapp:latest)"
