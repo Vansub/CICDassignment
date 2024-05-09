@@ -81,8 +81,7 @@ jobs:
               tags: |
                ${{ secrets.DOCKER_USERNAME }}/myapp:${{ github.sha }}
                ${{ secrets.DOCKER_USERNAME }}/myapp:v1.0.0 
-      -  name: Set up private key
-         run: echo "${{ secrets.COSIGN_PRIVATE_KEY }}" > cosign.key
+      
       -  name: Sign Docker image with cosign
          env:
           COSIGN_PRIVATE_KEY: '${{ secrets.COSIGN_PRIVATE_KEY }}'
