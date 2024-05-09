@@ -52,3 +52,50 @@ jobs:
             file_path: 'trivy_scan_results.txt'
             initial_comment: 'Vulnerabilities found in Trivy scan'
 
+      - name: vulnerabilities found- Exit workflow
+        if: steps.trivy.outcome == 'failure'
+            run:|
+          exit 1
+
+      - name: Build and push Docker image
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+              push: true
+              tags: |
+               ${{ secrets.DOCKER_USERNAME }}/myapp:${{ github.sha }}
+               ${{ secrets.DOCKER_USERNAME }}/myapp:v1.0.0 
+
+
+
+
+      - name: Get image digest
+        id: get_digest
+        run: echo "::set-output name=digest::$(docker inspect --format='{{index .RepoDigests 0}}' ${{ secrets.DOCKER_USERNAME }}/myapp:latest)"
+          
+      - name: Sign image with a key
+        run: |
+              images=""
+              for tag in ${TAGS}; do
+                images+="${tag}@${DIGEST} "
+              done
+              cosign sign --key env://COSIGN_PRIVATE_KEY myapp
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME}}
+          COSIGN_PASSWORD: ${{ secrets. COSIGN_PASSWORD}}
+          COSIGN_REPOSITORY: ${{ secrets.COSIGN_REPOSITORY }  
+
+          
+      - name: SLACK_MESSAGE_ON_SUCCESS
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          
+          SLACK_CHANNEL: ${{ SECRETS.SLACK_CHANNEL_NAME}}
+          SLACK_TITLE: "* SCAN STATUS-FAILED-${{ SECRETS.SLACK_USERNAME}}*"
+          SLACK_MESSAGE: 'TRIVY SCAN - VULNERABILITIES , REPORT UPLOADED'
+          SLACK_USERNAME: ${{ SECRETS.SLACK_USERNAME}}
+          SLACK_WEBHOOK: ${{ secrets.WEBHOOKURL }}
+          
+      
+
+
