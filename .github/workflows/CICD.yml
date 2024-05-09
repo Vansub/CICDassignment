@@ -37,27 +37,10 @@ jobs:
 
       - name: Check vulnerabilities
         run: |
-         
           if [[ $(echo "${{ steps.vulnerabilities.outputs.vulnerabilities }}" | grep "HIGH") ]]; then
           echo "Vulnerabilities found, exit"
           exit 1
           fi
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD}}
-    
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          push: true
-          tags: your-dockerhub-vs72/cicd-assignment:latest
-          
-
-    
-
       - name: SLACK_MESSAGE_ON_FAILURE
         if: steps.trivy.outcome == 'failure'
         uses : rtCamp/action-slack-notify@v2
@@ -80,6 +63,18 @@ jobs:
       - name: vulnerabilities found- Exit workflow
         if: steps.trivy.outcome == 'failure'
         run: exit 1
+        
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD}}
+    
+     
+          
+
+    
+
       - name: Build and push Docker image
         id: docker_build
         uses: docker/build-push-action@v2
