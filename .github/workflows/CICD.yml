@@ -17,7 +17,7 @@ jobs:
      
       - name: Scan go.mod file for vulnerabilities with Trivy
         run: |
-          trivy filesystem --format table --vuln-type library --severity HIGH,CRITICAL "C:\Users\Vani\Desktop\MyCIC
+          trivy filesystem --format table --vuln-type library --severity HIGH,CRITICAL "C:\Users\Vani\Desktop\MyCICDassignment\CICDassignment\go.mod"
 
       - name: Check vulnerabilities
         run: |
