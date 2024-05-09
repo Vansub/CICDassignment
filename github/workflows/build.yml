@@ -2,12 +2,13 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
+      - 'main'
       - 'release/v[0-9]+.[0-9]+'
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    jobs:
+    
   
     steps:
       - name: Checkout code
@@ -50,7 +51,7 @@ jobs:
           SLACK_WEBHOOK: ${{ secrets.WEBHOOKURL }}
           
 
-      - name: Send report to Slack
+      - name: Slack upload scan report
         If:  steps.trivy.outcome == 'failure'
       - uses: MeilCli/slack-upload-file@v4
         with:
