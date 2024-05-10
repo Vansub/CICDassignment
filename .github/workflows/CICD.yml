@@ -88,10 +88,11 @@ jobs:
     
     - name: Sign Docker image with cosign
       run: |
-        cosign sign --yes --key env://COSIGN_PRIVATE_KEY: '${{ secrets.COSIGN_PRIVATE_KEY }}'
+        echo "$COSIGN_PRIVATE_KEY" > cosign.key
+        cosign sign --yes --key cosign.key ${{ secrets.DOCKER_USERNAME }}/vs72/cicd-assignment:latest
       env:
-         COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD}}
-         DIGEST: ${{ steps.build-and-push.outputs.get_digest }}
+        COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
+        COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
          
     - name: Get image digest
       
