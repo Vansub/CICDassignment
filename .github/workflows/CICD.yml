@@ -89,7 +89,7 @@ jobs:
     - name: Sign Docker image with cosign
       run: |
         echo "$COSIGN_PRIVATE_KEY" > cosign.key
-        cosign sign --yes --key cosign.key ${{ secrets.DOCKER_USERNAME }}/vs72/cicd-assignment:latest
+        cosign sign --yes --key cosign.key ${{ secrets.DOCKER_USERNAME }}/cicd-assignment:latest
       env:
         COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
         COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
@@ -97,7 +97,7 @@ jobs:
     - name: Get image digest
       
       id: get_digest
-      run: echo "::set-output name=digest::$(docker inspect --format='{{index .RepoDigests 0}}' ${{ secrets.DOCKER_USERNAME }}/vs72/cicd-assignment:latest)"
+      run: echo "::set-output name=digest::$(docker inspect --format='{{index .RepoDigests 0}}' ${{ secrets.DOCKER_USERNAME }}/cicd-assignment:latest)"
          
       
 
